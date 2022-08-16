@@ -30,3 +30,16 @@ int	wr_err(char *str1, char *str2)
 	write(2, "\n", 1);
 	return (1);
 }
+
+int	bn2dec_print(char *name, BIGNUM *bn)
+{
+	char	*value;
+
+	value = NULL;
+	value = BN_bn2dec(bn);
+	if (value == NULL)
+		return (1);
+	printf("%s%s%s\n%s\n\n", MAG_I, name, WHITE, value);
+	free(value);
+	return (0);
+}

@@ -3,16 +3,20 @@
 NAME=corsair
 SRC=main.c\
 		gnl.c\
-		gnl_utils.c\
 		get_mod_exp.c\
 		error_handling.c\
-		frees.c
+		frees.c\
+		encrypt_and_decrypt.c\
+		creating_keys.c\
+		rsa.c
 OBJ=main.o\
 		gnl.o\
-		gnl_utils.o\
 		get_mod_exp.o\
 		error_handling.o\
-		frees.o
+		frees.o\
+		encrypt_and_decrypt.o\
+		creating_keys.o\
+		rsa.o
 CC=gcc -g3
 CFLAGS=-Wall -Wextra -Werror -g3
 DIRSSL = -I${HOME}/.brew/opt/openssl@1.1/include
@@ -27,5 +31,6 @@ clean:
 	@$(RM) $(OBJ)
 fclean: clean
 	@${RM} corsair
+	@${RM} corsair.dSYM
 re: fclean all
 .PHONY: all clean fclean re

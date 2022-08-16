@@ -4,91 +4,69 @@
 #include	"coRSAir.h"
 
 
-char	*find_next_line(char *holder)
+int	ft_check_ch(char *str)
 {
-	char	*line;
-	size_t	len;
+	int	i;
 
-	if (ft_strchr(holder, '\n'))
+	i = 0;
+	if (!str)
+		return (0);
+	while (str[i])
 	{
-		len = strlen(ft_strchr(holder, '\n'));
-		line = ft_substr(holder, 0, strlen(holder) - len + 1);
+		if (str[i] == '\n' || str[i] == '\0')
+			return (1);
+		i++;
 	}
-	else
-		line = ft_strdup(holder);
-	return (line);
+	return (0);
 }
 
-char	*save_holder(char *buf, char *holder)
+char	*ft_last_check(char *line, char c)
 {
-	char	*holder_new;
+	char	*str;
+	int		i;
 
-	if (!holder)
-		holder_new = ft_strdup(buf);
-	else
-	{
-		holder_new = ft_strjoin(holder, buf);
-		free(holder);
-	}
-	free(buf);
-	return (holder_new);
-}
-
-char	*new_holder(char *holder)
-{
-	int		len;
-	char	*new_holder;
-
-	if (!(ft_strchr(holder, '\n')))
-	{
-		free(holder);
+	i = 0;
+	while (line[i])
+		i++;
+	str = (char *) malloc(2 + i);
+	if (!str)
 		return (NULL);
-	}
-	len = strlen(holder) - strlen(ft_strchr(holder, '\n'));
-	new_holder = ft_strdup(&holder[len + 1]);
-	free(holder);
-	return (new_holder);
-}
-
-char	*read_file(int fd, char *holder)
-{
-	char	*buf;
-	int		num_bytes;
-
-	num_bytes = 1;
-	while (num_bytes > 0 && !ft_strchr(holder, '\n'))
+	i = 0;
+	while (line[i])
 	{
-		buf = (char *)malloc(1 + 1);
-		if (!buf)
-			return (NULL);
-		num_bytes = read(fd, buf, 1);
-		if (num_bytes == -1 || (!num_bytes && !holder))
-		{
-			free(buf);
-			return (NULL);
-		}
-		if (num_bytes == 0 && *holder == 0)
-		{
-			free(holder);
-			free(buf);
-			return (NULL);
-		}
-		buf[num_bytes] = '\0';
-		holder = save_holder(buf, holder);
+		str[i] = line[i];
+		i++;
 	}
-	return (holder);
+	str[i] = c;
+	str[i + 1] = '\0';
+	free(line);
+	return (str);
 }
 
 char	*get_next_line(int fd)
 {
-	char		*line;
-	static char	*holder;
+	char	*line;
+	char	buff;
+	int		reader;
 
-	holder = read_file(fd, holder);
-	if (!holder)
+	line = malloc(1);
+	if (fd < 0 || !line)
 		return (NULL);
-	line = find_next_line(holder);
-	holder = new_holder(holder);
+	line[0] = '\0';
+	reader = 1;
+	while (!ft_check_ch(line) && reader != 0)
+	{
+		reader = read(fd, &buff, 1);
+		if (reader <= 0)
+		{
+			if (line[0] == '\0' || reader < 0)
+			{
+				free(line);
+				return (NULL);
+			}
+			return (line);
+		}
+		line = ft_last_check(line, buff);
+	}
 	return (line);
 }
-

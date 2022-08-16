@@ -56,7 +56,6 @@ int	free_get_n_e(BIO	*bioPub, X509 *cert, EVP_PKEY *pkey, RSA *rsa);
 int	free_breaking(int nb, mod_exp_t *n_e, rsa_data_t *rsa_d, char *msg);
 int	free_rsa(int n, rsa_data_t *rsa_d);
 
-
 //get_mod_exp.c
 int	ft_get_module_exponent(char *file, BIGNUM	*n, BIGNUM *e);
 int open__read_file(file_info_t *info, char *file);
@@ -66,5 +65,15 @@ int	get_mod_exp(file_info_t *info, BIGNUM *n, BIGNUM *e, const BIGNUM *tmp);
 //error_handling.c
 int	error_handling(int argc);
 int	wr_err(char *str1, char *str2);
+int	bn2dec_print(char *name, BIGNUM *bn);
 
+//encrypt_and_decrypt.c
+int	encrypting(mod_exp_t *n_e, rsa_data_t *rsa_d, BN_CTX *ctx, int len);
+
+//creating_keys.c
+int	create_private_key(rsa_data_t	*rsa_d, mod_exp_t	*n_e, BN_CTX	*ctx);
+
+//rsa.c
+int	init_rsa(rsa_data_t *rsa_d);
+int	get_primes(rsa_data_t	*rsa_d, mod_exp_t	*n_e, BN_CTX	*ctx);
 #endif
